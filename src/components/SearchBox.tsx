@@ -1,16 +1,15 @@
-import * as React from 'react';
-import {IconButton, InputBase, Box, CircularProgress} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import * as React from "react";
+import { IconButton, InputBase, Box, CircularProgress } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface Props {
-  placeholder: string
-  loading: boolean,
-  value: string,
-  onChange: React.ChangeEventHandler<HTMLInputElement>,
-  searchClick: React.MouseEventHandler<HTMLButtonElement>,
-  onEnter: React.KeyboardEventHandler<HTMLInputElement>
+  placeholder: string;
+  loading: boolean;
+  value: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  searchClick: React.MouseEventHandler<HTMLButtonElement>;
+  onEnter: React.KeyboardEventHandler<HTMLInputElement>;
 }
-
 
 class SearchBox extends React.Component<Props> {
   render() {
@@ -26,19 +25,25 @@ class SearchBox extends React.Component<Props> {
         boxShadow="0 3px 5px 2px rgba(255, 105, 135, .3)"
         component="form"
       >
-        <IconButton sx={{ p: '10px' }} aria-label="search"
+        <IconButton
+          sx={{ p: "10px" }}
+          aria-label="search"
           onClick={this.props.searchClick}
         >
           <SearchIcon />
         </IconButton>
-        {this.props.loading ? <CircularProgress color="inherit" size={20} /> : null}
+        {this.props.loading ? (
+          <CircularProgress color="inherit" size={20} />
+        ) : null}
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder={this.props.placeholder}
-          onSubmit={e => { e.preventDefault(); }}
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
           onKeyDown={this.props.onEnter}
           onChange={this.props.onChange}
-        /> 
+        />
       </Box>
     );
   }
