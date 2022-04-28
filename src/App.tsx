@@ -37,10 +37,14 @@ function App() {
   var [options, setOptions] = React.useState<jsonSchema.SearchMovy[]>([]);
 
   async function searchMovies() {
-    await setLoading(true);
-    await md.sendRequest(searchValue);
-    await (setOptions(JSON.parse(JSON.stringify(md.getResponse()).replace(/\:null/gi, "\:\"\"")).data.searchMovies));
-    await setLoading(false);
+    if(searchValue === null || searchValue.match(/^ *$/) !== null)
+      alert('u must enter a movie name');
+    else {
+      await setLoading(true);
+      await md.sendRequest(searchValue);
+      await (setOptions(JSON.parse(JSON.stringify(md.getResponse()).replace(/\:null/gi, "\:\"\"")).data.searchMovies));
+      await setLoading(false);
+    }
   }
 
   async function getSummary(name:string) {
@@ -48,14 +52,6 @@ function App() {
     return await wapi.getResponse();
   }
 
-  /*async function setMovieData(_name:string, _score:number, _genres:jsonSchema.Genre[], _imgPoster:string, _imgBackdrop:string) {
-    movieBoxData.name = _name;
-    movieBoxData.score = _score;
-    movieBoxData.genres = _genres;
-    movieBoxData.imgPoster = _imgPoster;
-    movieBoxData.imgBackdrop = _imgBackdrop;
-    movieBoxData.summary = (await getSummary(_name)).toString();
-  }*/
 
   return (
     <Box className={AppStyle.AppBackground}>
@@ -64,7 +60,6 @@ function App() {
       <Box className={AppStyle.AppBase}>
         <Box className={AppStyle.AppPage}>
           <SearchBox 
-            className={AppStyle.SearchBox} 
             loading={loading}
             ref={textInput}
             value={searchValue}
@@ -73,16 +68,27 @@ function App() {
               setSearchValue(e.target.value);
             }}
             searchClick={(e) => {
-              if(searchValue === null || searchValue.match(/^ *$/) !== null)
-                alert('u must enter a movie name');
-              else
-                searchMovies();
+              searchMovies();
             }}
-
+            onEnter={(e) => {
+              if (e.key === 'Enter')
+              {
+                e.preventDefault();
+                searchMovies();
+              }
+            }}
           ></SearchBox>
           </Box>
-        <Box sx={{zIndex: 6, maxWidth: '75vw', marginTop: '20px', paddingTop: '20px', overflow: 'auto', maxHeight: '80vh'}}>
-          <Grid sx={{ flexGrow: 1 }} container spacing={2}>
+        <Box
+          zIndex="6"
+          maxWidth="75vw"
+          marginTop="20px"
+          paddingTop="20px"
+          overflow="auto"
+          maxHeight="80vh"
+        >
+          <Grid
+            flexGrow={1} container spacing={2}>
             <Grid item xs={12}>
               <Grid container justifyContent="center" spacing={2}>
                 {options.map(data => (
@@ -116,9 +122,10 @@ function App() {
               movieName={movieData.name}
               movieScore={movieData.score}
               movieGenres={movieData.genres}
-              movieImgPoster={movieData.imgPoster}
               movieImgBackdrop={movieData.imgBackdrop}
               movieSummary={movieData.summary}
+              openTMDB={()=> {window.open(`https://en.wikipedia.org/wiki/${movieData.name}`, "_blank")}}
+              openWIKI={()=> {}}
             ></MovieDataBox>
         </Box>
         

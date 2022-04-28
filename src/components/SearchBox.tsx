@@ -1,22 +1,30 @@
 import * as React from 'react';
-import {IconButton, InputBase, Paper, CircularProgress} from '@mui/material';
+import {IconButton, InputBase, Box, CircularProgress} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
 interface Props {
-  className: string,
   placeholder: string
   loading: boolean,
   value: string,
   onChange: React.ChangeEventHandler<HTMLInputElement>,
-  searchClick: React.MouseEventHandler<HTMLButtonElement>
+  searchClick: React.MouseEventHandler<HTMLButtonElement>,
+  onEnter: React.KeyboardEventHandler<HTMLInputElement>
 }
+
 
 class SearchBox extends React.Component<Props> {
   render() {
     return (
-      <Paper
+      <Box
+        width="100%"
+        maxWidth="400px"
+        alignItems="center"
+        p="2px 4px"
+        display="flex"
+        bgcolor="rgba(45, 225, 175, 0.7) !important"
+        borderRadius={15}
+        boxShadow="0 3px 5px 2px rgba(255, 105, 135, .3)"
         component="form"
-        className={this.props.className}
       >
         <IconButton sx={{ p: '10px' }} aria-label="search"
           onClick={this.props.searchClick}
@@ -27,13 +35,11 @@ class SearchBox extends React.Component<Props> {
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder={this.props.placeholder}
-          
-          autoComplete='off'
-          value={this.props.value}
-          type='text'
+          onSubmit={e => { e.preventDefault(); }}
+          onKeyDown={this.props.onEnter}
           onChange={this.props.onChange}
         /> 
-      </Paper>
+      </Box>
     );
   }
 }

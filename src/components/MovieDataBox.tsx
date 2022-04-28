@@ -22,9 +22,10 @@ interface Props {
   movieName: string,
   movieScore: number,
   movieGenres: jsonSchema.Genre[],
-  movieImgPoster: string,
   movieImgBackdrop: string,
   movieSummary: string,
+  openTMDB: React.MouseEventHandler<HTMLButtonElement>,
+  openWIKI: React.MouseEventHandler<HTMLButtonElement>
 }
 
 const boxStyle = createStyles({
@@ -43,45 +44,99 @@ class MovieDataBox extends React.Component<Props> {
 
   render() {
     return (
-      <Grid item className={this.props.classes.MovieDataBox} xs={12} sx={{width: '100%',  height: '100vh', paddingBottom: '50px', background: 'url(' + this.props.movieImgBackdrop + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }} >
-        <Card sx={{ width: '100%',  height: '100%', background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 10%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.8) 60%)'}}>
-        <ScrollIntoView selector="#movieList">
-            <Button variant="contained" sx={{backgroundColor: '#2de1af', color: 'rgb(30,30,30)'}}>Back to the search</Button>
-          </ScrollIntoView>
-          <CardContent sx={{ color: '#2de1af'}}>
-            <Typography gutterBottom variant="h4" component="div" sx={{textAlign: 'center'}}>
-              {this.props.movieName}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-            </Typography>
-          </CardContent>
-          <CardContent>
-          <Typography variant="body1" color="#2de1af" sx={{ overflow: 'scroll', height: '100%'}}>
-          {this.props.movieSummary}
-            </Typography>
-            <Typography variant="body2" color="#2de1af">
+      <Box 
+        className={this.props.classes.MovieDataBox}
+        display="flex" 
+        justifyContent="center"
+        flexWrap="wrap"
+        width="100%" height="100vh"
+        sx={{
+          backgroundImage: `url(${this.props.movieImgBackdrop})`,
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover' }}
+        >
+        <Box
+          display="flex"
+          flexWrap="wrap"
+          justifyContent="center"
+          width="100%" height="100%"
+        >
+          <Box 
+            width="100%"
+            maxWidth="450px"
+            height="100%"
+            position="relative"
+            sx={{background: 'linear-gradient(180deg, rgba(0,0,0,0.8) 70%, rgba(85,94,174, 0.9) 100%)', backdropFilter: 'blur(5px)'}}
+          >
+            <ScrollIntoView selector="#movieList">
+              <Button variant="contained" sx={{backgroundColor: '#2de1af', color: 'rgb(30,30,30)'}}>Back to the search</Button>
+            </ScrollIntoView>
             <Box
-                sx={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  alignContent: 'center',
-                  bgcolor: 'transparent',
-                  borderRadius: 1,
-                  color: '#2de1af',
-                  minHeight: '60px',
-                }}
+              color="#2de1af"
+              p={4}
+              paddingBottom={1}
+            >
+              <Typography gutterBottom variant="h4" component="div" textAlign="center">
+                {this.props.movieName}
+              </Typography>
+            </Box>
+            <Box
+              color="#2de1af"
+              p={4}
+            >
+              <Typography variant="body1" color="#2de1af" overflow="scroll" maxHeight="30vh">
+                {this.props.movieSummary}
+              </Typography>
+              <Box
+                whiteSpace= "nowrap"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
               >
-                {this.props.movieGenres.map(genre => (
-                    <Box sx={{border: '1px solid', p: '3px', m: '2px', borderRadius:'15px'}}>{genre.name}</Box>
-                  ))} 
+                <Button onClick={this.props.openTMDB} variant="contained" sx={{backgroundColor: '#2de1af', color: 'rgb(30,30,30)'}}>TMDB</Button>
+                <Button onClick={this.props.openWIKI} variant="contained" sx={{backgroundColor: '#2de1af', color: 'rgb(30,30,30)'}}>WIKI</Button>
+              </Box>
+            </Box>
+            <Box
+              position="absolute"
+              bottom={80}
+              left={0}
+              right={0}
+              maxWidth={'450px'}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Typography variant="body2" color="#2de1af">
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  >
+                    {this.props.movieGenres.map(genre => (
+                      <Box
+                        border="1px solid"
+                        p="3px"
+                        m="2px"
+                        borderRadius="15px"
+                      >
+                        {genre.name}
+                      </Box>
+                    ))} 
                   </Box>
-              <Divider sx={{ height: '1px', m: 0.5, background: 'linear-gradient(90deg, rgba(45,225,175,0.0) 0%, rgba(45,225,175,0.7) 35%, rgba(45,225,175,0.7) 65%, rgba(45,225,175,0.0) 100%)' }} orientation="horizontal" />
-                rating:
-              <Rating name="read-only" value={this.props.movieScore} max={10} readOnly />
-            </Typography>     
-          </CardContent>
-        </Card>
-      </Grid>
+                <Box
+                  margin={4}
+                  height="1px"
+                  sx={{background: 'linear-gradient(90deg, rgba(45,225,175,0.0) 0%, rgba(45,225,175,0.7) 15%, rgba(45,225,175,0.7) 85%, rgba(45,225,175,0.0) 100%)' }}
+                  />
+                <Rating name="read-only" value={this.props.movieScore} max={10} readOnly />
+              </Typography>  
+            </Box>
+          </Box>
+
+        </Box>
+      </Box>
     );
   }
 }
